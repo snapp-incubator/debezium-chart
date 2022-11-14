@@ -1,0 +1,79 @@
+nameOverride: ""
+fullnameOverride: ""
+
+connect:
+  replicaCount: 1
+  imagePullSecrets: [ ]
+
+  image:
+    repository: quay.io/debezium/connect
+    pullPolicy: Always
+    tag: "1.9"
+
+  service:
+    type: ClusterIP
+    port: 8083
+    protocol: TCP
+    name: http
+
+  ingress:
+    enabled: false
+
+  autoscaling:
+    enabled: false
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+  env:
+    - name: BOOTSTRAP_SERVERS
+      value: KAFKA_BOOTSTRAP_SERVER_ADDRESS:9092
+    - name: GROUP_ID
+      value: "1"
+    - name: CONFIG_STORAGE_TOPIC
+      value: debezium_connect_configs
+    - name: OFFSET_STORAGE_TOPIC
+      value: debezium_connect_offsets
+    - name: STATUS_STORAGE_TOPIC
+      value: debezium_connect_statuses
+
+ui:
+  replicaCount: 1
+  imagePullSecrets: [ ]
+
+  image:
+    repository: debezium/debezium-ui
+    pullPolicy: Always
+    tag: "1.9"
+
+  service:
+    type: ClusterIP
+    port: 8080
+    protocol: TCP
+    name: http
+
+  ingress:
+    enabled: true
+    router: private
+    host: DEBEZIUM_UI_HOST_ADDRESS
+
+  autoscaling:
+    enabled: false
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+  env:
+    - name: KAFKA_CONNECT_URIS
+      value: "http://debezium-connect:8083"
+
