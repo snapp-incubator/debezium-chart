@@ -2,6 +2,9 @@
 <img src="https://debezium.io/assets/images/color_white_debezium_type_600px.svg" style="width:256px;">
 <p style="font-weight: bold; font-size: x-large">Debezium Helm Chart</p>
 <p>Debezium helm chart including <span style="background: darkcyan">connect</span> and <span style="background: darkcyan">UI</span> components</p>
+<img src="https://img.shields.io/badge/license-apache_2.0-red?style=for-the-badge&logo=none" alt="license" />
+
+<img src="https://img.shields.io/badge/Version-0.0.1-informational?style=for-the-badge&logo=none" alt="version" />
 </center>
 
 ## Deployment
