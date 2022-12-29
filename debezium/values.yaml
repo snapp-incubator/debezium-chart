@@ -43,6 +43,7 @@ connect:
       value: debezium_connect_statuses
 
 ui:
+  enabled: true
   replicaCount: 1
   imagePullSecrets: [ ]
 
