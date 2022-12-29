@@ -45,4 +45,4 @@ improvement or other matters.
 
 ## Todo List
 
-- [ ] option to disable UI
+- [x] option to disable UI
