@@ -15,6 +15,7 @@ spec:
   selector:
     {{- include "debezium.selectorLabels.connect" . | nindent 4 }}
 ---
+{{- if .Values.ui.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -30,3 +31,4 @@ spec:
       name: {{ .Values.ui.service.name}}
   selector:
     {{- include "debezium.selectorLabels.ui" . | nindent 4 }}
+{{- end}}
