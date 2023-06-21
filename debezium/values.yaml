@@ -8,7 +8,7 @@ connect:
   image:
     repository: quay.io/debezium/connect
     pullPolicy: Always
-    tag: "1.9"
+    tag: "2.2"
 
   service:
     type: ClusterIP
@@ -30,6 +30,9 @@ connect:
       cpu: 500m
       memory: 1Gi
 
+  volumes: {}
+  volumeMounts: {}
+
   env:
     - name: BOOTSTRAP_SERVERS
       value: KAFKA_BOOTSTRAP_SERVER_ADDRESS:9092
@@ -50,7 +53,7 @@ ui:
   image:
     repository: debezium/debezium-ui
     pullPolicy: Always
-    tag: "1.9"
+    tag: "2.2"
 
   service:
     type: ClusterIP
