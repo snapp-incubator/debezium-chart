@@ -1,19 +1,40 @@
----
-{{- if and .Values.ui.ingress.enabled .Values.ui.enabled -}}
-apiVersion: route.openshift.io/v1
-kind: Route
+
+{{- if and .Values.connect.ingress.enabled -}}
+{{- $fullName := printf "%s-%s" (include "debezium.fullname" .) "connect" -}}
+{{- $svcPort := .Values.connect.service.port -}}
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: {{ include "debezium.fullname" $ }}-ui
+  name: {{ include "debezium.fullname" $ }}-connect
   labels:
-    router: {{ .Values.ui.ingress.router }}
-    {{- include "debezium.labels.ui" $ | nindent 4 }}
+    {{- include "debezium.labels.connect" $ | nindent 4 }}
+  {{- with .Values.connect.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
-  host: {{ .Values.ui.ingress.host | quote }}
-  port:
-    targetPort: {{ $.Values.ui.service.port }}
-  to:
-    kind: Service
-    name: {{ include "debezium.fullname" $ }}-ui
-    weight: 100
-  wildcardPolicy: None
+  ingressClassName: {{ .Values.connect.ingress.className }}
+  rules:
+    {{- range .Values.connect.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: {{ .pathType }}
+            {{- end }}
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ .serviceName | default $fullName }}
+                port:
+                  number: {{ .portNumber | default $svcPort }}
+              {{- else }}
+              serviceName: {{ .serviceName | default $fullName }}
+              servicePort: {{ .portNumber | default $svcPort }}
+              {{- end }}
+          {{- end }}
+    {{- end }}
 {{- end }}
