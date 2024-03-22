@@ -1,4 +1,4 @@
-FROM quay.io/debezium/connect:2.2.0.Final
+FROM quay.io/debezium/connect:2.3.4.Final
 ENV CONFLUENT_VERSION=7.4.0 \
     AVRO_VERSION=1.11.0 \
     GUAVA_VERSION=30.1.1-jre
